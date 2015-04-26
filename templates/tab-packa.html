@@ -1,10 +1,33 @@
 <ion-view view-title="Packlista">
   <ion-content>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="p in packa" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <h2>{{p.name}}</h2>
-       <!-- <p>{{p.lastText}}</p>-->
-        <i class="icon ion-chevron-right icon-accessory"></i>
+ <!-- <li class="item item-checkbox" ng-repeat="p in packa">
+  	      <div class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+     <label class="checkbox">
+       <input type="checkbox">
+     </label>
+     {{p.name}}
+             <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-button class="button-assertive" ng-click="remove(p)">
+          Delete
+        <ion-button>
+ </div>
+
+  </li>-->
+    <div class="item item-input-inset">
+    <label class="item-input-wrapper">
+      <input type="text" name="item.text" ng-model="item.text">
+    </label>
+    <button class="button button-positive button-small" ng-click="add()">
+      Lägg till
+    </button>
+  </div>
+
+   <ion-list>
+      <ion-item class="item-remove-animate item-avatar" ng-repeat="p in packa" type="item-text-wrap">
+      <div class="item-checkbox">
+      <label class="checkbox"> <input type="checkbox" ng-model="p.checked" ng-checked="p.checked"></label></div>
+        <p>{{p.name}}</p>
 
         <ion-option-button class="button-assertive" ng-click="remove(p)">
           Delete

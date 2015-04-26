@@ -43,14 +43,11 @@ angular.module('starter.services', [])
   var packalista = [{
     id: 0,
     name: 'Prideflagga',
-    lastText: '',
-    face: 'img/bil.jpg'
+    checked: true,
   }, {
     id: 1,
     name: 'Plattång',
-    lastText: 'Gran Canyon',
-    face: 'img/helikopter.jpg'
-
+    checked: false,
   }];
 
   return {
@@ -59,6 +56,9 @@ angular.module('starter.services', [])
     },
     remove: function(packa) {
       packalista.splice(packalista.indexOf(packa), 1);
+    },
+    add: function(packa) {
+      packalista.push({id: packalista.length+1, name: packa, checked: false});
     },
     get: function(packaId) {
       for (var i = 0; i < packalista.length; i++) {

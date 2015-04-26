@@ -100,7 +100,13 @@ angular.module('starter.controllers', [])
 
 .controller('PackaCtrl', function($scope, Packa) {
    $scope.packa = Packa.all();
+   $scope.item = {text: ""};
   $scope.remove = function(packa) {
     Packa.remove(packa);
+   }
+
+   $scope.add = function(){
+    Packa.add($scope.item.text);
+    $scope.item = {text: ""};
    }
 });
