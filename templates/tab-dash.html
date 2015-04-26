@@ -1,28 +1,26 @@
-<ion-view view-title="Pällseappen">
+<ion-view view-title="MAJS RESPLAN">
   <ion-content class="padding">
     <div class="list card">
-      <div class="item item-divider">GODNATT ÄLSKLING!!!</div>
+      <div class="item item-divider">Kalender</div>
       <div class="item item-body">
-        <div>
-          I love u pälls</b>
-        </div>
+ <div ng-controller="MainSchedulerCtrl">
+    <div data="events" dhx-scheduler style="height:400px; width:460px;">
+    <div class="dhx_cal_prev_button">&nbsp;</div>
+    <div class="dhx_cal_next_button">&nbsp;</div>
+    <!--<div class="dhx_cal_today_button"></div>-->
+    <div class="dhx_cal_date"></div>
+  <!--  <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+    <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+    <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>  -->  
+
+    <div dhx-template="event_bar_text">
+      {{event.text | uppercase}}
+    </div>
+  <div>
+</div>
+
       </div>
     </div>
-    <div class="list card">
-      <div class="item item-divider">Puss</div>
-      <div class="item item-body">
-        <div>
-         Saknar dig här ute vid tvn
-        </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Kommer snart...</div>
-      <div class="item item-body">
-        <div>
-         ...o kryper ner
-        </div>
-      </div>
-    </div>
+ 
   </ion-content>
 </ion-view>
