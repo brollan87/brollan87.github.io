@@ -76,9 +76,9 @@ angular.module('starter.controllers', [])
     { id:1, text:"Los Angeles",
       start_date: new Date(2015, 05, 11),
       end_date: new Date(2015, 05, 15) },
-    { id:2, text:"Task A-83473",
-      start_date: new Date(2013, 10, 22 ),
-      end_date: new Date(2013, 10, 24 ) }
+    { id:2, text:"Las Vegas",
+      start_date: new Date(2015, 05, 15 ),
+      end_date: new Date(2015, 05, 18 ) }
   ];
 
   $scope.scheduler = { date : new Date(2015,05,10) };
