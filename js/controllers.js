@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['firebase'])
 
 .directive('dhxScheduler', function() {
   return {
@@ -88,6 +88,8 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
 
 .controller('FixaCtrl', function($scope, Fixa) {
+
+
   $scope.fixa = Fixa.all();
   $scope.remove = function(fixa) {
     Fixa.remove(fixa);
@@ -98,15 +100,23 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('PackaCtrl', function($scope, Packa) {
-   $scope.packa = Packa.all();
-   $scope.item = {text: ""};
-  $scope.remove = function(packa) {
-    Packa.remove(packa);
-   }
+.controller('PackaCtrl', function($scope, $firebaseArray){
+  $scope.item = {text: ""};
+var ref = new Firebase('https://brollan87.firebaseio.com/packlista');
 
-   $scope.add = function(){
-    Packa.add($scope.item.text);
-    $scope.item = {text: ""};
-   }
+    $scope.packa = $firebaseArray(ref);
+
+    $scope.addItem = function(){
+      $scope.packa.$add({ text: $scope.item.text, checked: false });
+      $scope.item = {text: ""};
+    }
+
+    $scope.removeItem = function(packa){
+      console.log(packa.text);
+      $scope.packa.$remove(packa);
+    }
+
+    $scope.updateItem = function(packa){
+       $scope.packa.$save(packa);
+    }
 });

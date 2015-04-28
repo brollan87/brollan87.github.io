@@ -18,7 +18,7 @@
     <label class="item-input-wrapper">
       <input type="text" name="item.text" ng-model="item.text">
     </label>
-    <button class="button button-positive button-small" ng-click="add()">
+    <button class="button button-positive button-small" ng-click="addItem()">
       Lägg till
     </button>
   </div>
@@ -26,10 +26,10 @@
    <ion-list>
       <ion-item class="item-remove-animate item-avatar" ng-repeat="p in packa" type="item-text-wrap">
       <div class="item-checkbox">
-      <label class="checkbox"> <input type="checkbox" ng-model="p.checked" ng-checked="p.checked"></label></div>
-        <p>{{p.name}}</p>
+      <label class="checkbox"> <input type="checkbox" ng-model="p.checked" ng-checked="p.checked" ng-change="updateItem(p)"></label></div>
+        <p>{{p.text}}</p>
 
-        <ion-option-button class="button-assertive" ng-click="remove(p)">
+        <ion-option-button class="button-assertive" ng-click="removeItem(p)">
           Delete
         </ion-option-button>
       </ion-item>
