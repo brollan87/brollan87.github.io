@@ -7,7 +7,7 @@ angular.module('starter.controllers', ['firebase'])
     transclude: true,
     template:'<div class="dhx_cal_navline" ng-transclude></div><div class="dhx_cal_header"></div><div class="dhx_cal_data"></div>',
 
-    
+
 
     link:function ($scope, $element, $attrs, $controller){
       //default state of the scheduler
@@ -87,17 +87,168 @@ angular.module('starter.controllers', ['firebase'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('FixaCtrl', function($scope, Fixa) {
+.controller('FixaCtrl', function($scope, $firebaseArray, $location, $state, Fixa, $filter) {
+  $scope.itemsList = [{label:'test', url: 'http://s9.postimage.org/hqlg2ks97/image.gif'}];
+   $scope.item = {text: ""};
+   var ref = new Firebase('https://brollan87.firebaseio.com/fixalista');
+
+    $scope.fixa = $firebaseArray(ref);
 
 
-  $scope.fixa = Fixa.all();
-  $scope.remove = function(fixa) {
-    Fixa.remove(fixa);
-   }
+
+    $scope.viewDetails = function(fixa){
+      Fixa.setSelected(fixa);
+     
+      //console.log($scope.selectedFixa.text);
+        $scope.$broadcast('newSelected', 'Some data');
+      $state.go('tab.fixa-detail')
+
+    }
+
+    $scope.getBildUrl = function(f){
+     console.log(f);
+      $scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
+$scope.images2 = [{url : 'img/bil.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
+$scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id: 32}, {url: 'img/roadtripicon.jpg',  id: 33}];
+     var single_object;
+    if(f.bildid){
+       single_object = $filter('filter')($scope.images, function (d) {return d.id === f.bildid;})[0];
+      if(!single_object){
+        single_object =  $filter('filter')($scope.images2, function (d) {return d.id === f.bildid;})[0];
+      }
+      if(!single_object){
+        single_object =  $filter('filter')($scope.images3, function (d) {return d.id === f.bildid;})[0];
+      }
+     return single_object.url;
+    }
+   // return single_object.url;
+  
+   // return 'img/helikopter.jpg';
+
+    }
+
+  //      $scope.fixa.bild = $scope.getBildUrl($scope.fixa.bildid);
+
+    $scope.addItem = function(){
+      $scope.fixa.$add({ text: $scope.item.text, info: '', messages: $scope.messages});
+     // var child = $scope.fixa.
+      $scope.item = {text: ""};
+    }
+
+    $scope.removeItem = function(fixa){
+      $scope.fixa.$remove(fixa);
+    }
+
+    $scope.updateItem = function(packa){
+       $scope.fixa.$save(fixa);
+    }
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+.controller('FixaDetailCtrl', function($scope, $stateParams, $firebaseObject, Fixa, $firebaseArray, $ionicModal, $ionicSlideBoxDelegate, $filter ) {
+
+$scope.showImages = false;
+
+$scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
+$scope.images2 = [{url : 'img/bil.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
+$scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id: 32}, {url: 'img/roadtripicon.jpg',  id: 33}];
+
+
+  $scope.showLaggtill = false;
+   $scope.forslag = {text: '', lank: ''};
+
+    $scope.selectedFixa = Fixa.getSelected();
+    //$scope.bild = $scope.images
+   
+       var ref = new Firebase('https://brollan87.firebaseio.com/fixalista/'+$scope.selectedFixa.$id);
+      $scope.fixa = $firebaseObject(ref);
+      var refForslag = new Firebase('https://brollan87.firebaseio.com/fixalista/'+$scope.selectedFixa.$id+ '/forslag');
+      $scope.forslagarr = $firebaseArray(refForslag);
+ 
+
+
+  $scope.setBild = function(){
+        if($scope.selectedFixa.bildid){
+      var single_object = $filter('filter')($scope.images, function (d) {return d.id === $scope.selectedFixa.bildid;})[0];
+      if(!single_object){
+        single_object =  $filter('filter')($scope.images2, function (d) {return d.id === $scope.selectedFixa.bildid;})[0];
+      }
+      if(!single_object){
+        single_object =  $filter('filter')($scope.images3, function (d) {return d.id === $scope.selectedFixa.bildid;})[0];
+      }
+      $scope.bild = single_object.url;
+    }
+  }
+
+  $scope.setBild();
+
+    $scope.like = function(f){
+      f.likes++;
+       $scope.forslagarr.$save(f);
+    }
+
+    $scope.clickShowLaggtill = function(){
+      if($scope.showLaggtill){
+        $scope.showLaggtill = false;
+      }
+      else{
+        $scope.showLaggtill = true;
+      }
+    }
+
+    $scope.showImagesList = function(){
+   if($scope.showImages){
+    $scope.showImages = false
+   }else{
+    $scope.showImages = true;
+   }
+}
+
+$scope.setImage = function(id){
+  $scope.fixa.bildid= id;
+  $scope.fixa.$save();
+  $scope.selectedFixa = $scope.fixa;
+  $scope.showImages = false;
+  $scope.setBild();
+
+}
+
+    $scope.laggtillClass = function(){
+      if($scope.showLaggtill){
+        return "item item-divider ion-minus-round";
+      }
+      else{
+        return "item item-divider ion-plus-round";
+      }
+    }
+
+    $scope.sparaInfotext = function(infotext){
+        if($scope.fixa){
+        $scope.fixa.info = infotext;
+        $scope.fixa.$save();
+        $scope.infotext = "";
+      }
+    }
+
+    $scope.raderaInfotext = function(){
+      $scope.fixa.info = '';
+      $scope.fixa.$save();
+  }
+
+  $scope.sparaForslag = function(forslag){
+       //  $scope.forslag = [{forslagtext: forslag.text, link: forslag.lank, likes: 0}];
+       var forslaglankString ='';
+       var forslagtextString = '';
+       if(forslag.text){
+        forslagtextString = forslag.text;
+       }
+       if(forslag.lank){
+        forslaglankString = forslag.lank;
+       }
+         $scope.forslagarr.$add({forslagtext: forslagtextString, link: forslaglankString, likes: 0});
+     $scope.showLaggtill = false;
+     $scope.forslag = {text: '', lank: ''};
+
+  }
 })
 
 .controller('PackaCtrl', function($scope, $firebaseArray){
@@ -119,4 +270,5 @@ var ref = new Firebase('https://brollan87.firebaseio.com/packlista');
     $scope.updateItem = function(packa){
        $scope.packa.$save(packa);
     }
-});
+})
+;

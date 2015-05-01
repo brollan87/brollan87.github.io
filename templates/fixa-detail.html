@@ -1,0 +1,98 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="{{chat.name}}">
+  <ion-content class="padding">
+<div class="card">
+
+    <div class="item item-divider">
+
+    <h2>{{selectedFixa.text}}</h2>
+  </div>
+
+  <div ng-show="!selectedFixa.info" class="item item-body">
+
+    <label class="item item-input item-floating-label">
+             <div class="item item-avatar" style="float: right;">
+    <img ng-src="{{bild}}">
+  </div>
+    <span class="input-label">Information</span>
+    <textarea type="text" rows="3" style="font-size:23px;" ng-model="infotext" placeholder="Information"></textarea>
+               <button type="button" style="float:right;" class="button button-small button-balanced ion-checkmark" ng-disabled="!infotext" on-tap="sparaInfotext(infotext)"></button>
+
+    </label>
+
+  </div>
+    <div ng-show="selectedFixa.info" class="item item-body">
+    <label class="item item-input item-floating-label">
+    <span class="label">Information</span>
+    </label>
+    <p>{{selectedFixa.info}}           </p>
+       <button type="button" style="float:right;" class="button button-small button-assertive ion-close" on-tap="raderaInfotext()"></button>
+  </div>
+     <button class="icon ion-image" ng-click="showImagesList()"></button>
+
+
+  <ion-slide-box show-pager="false" class="cssSlideUp" ng-show="showImages">
+    <ion-slide>
+        <img ng-repeat="i in images" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
+    </ion-slide>
+        <ion-slide>
+        <img ng-repeat="i in images2" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
+    </ion-slide>
+        <ion-slide>
+        <img ng-repeat="i in images3" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
+    </ion-slide>
+</ion-slide-box>
+
+
+</div>
+
+<div class="card">
+  
+  <div ng-class="laggtillClass();"ng-click="clickShowLaggtill()">
+    Lägg till förslag
+  </div>
+
+  <div class="item item-text-wrap" ng-show="showLaggtill">
+    <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
+    <span class="input-label">Text</span>
+    <textarea type="text" style="font-size:23px;" rows="3" ng-model="forslag.text" placeholder="Text"></textarea>
+  </label>
+  <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
+        <span class="input-label">Länk</span>
+    <input type="text" style="font-size:23px;" ng-model="forslag.lank" placeholder="Länk"></input>
+    </label>
+   </div>
+   <div class="item item-divider cssSlideUp" ng-show="showLaggtill">
+      <button type="button" style="float:right;" class="button button-small button-balanced ion-checkmark" ng-disabled="!forslag.lank && !forslag.text" on-tap="sparaForslag(forslag);"></button>
+  </div>
+
+</div>
+
+
+
+<div class="card" ng-repeat="f in forslagarr | orderBy : '-$id'">
+  
+  <div class="item item-divider">
+    Förslag
+  </div>
+  <div class="item item-text-wrap">
+      <h>{{f.forslagtext}}<h>
+        <br>
+        <br>
+    <a  href="{{f.link}}">{{f.link}}</a>
+   </div>
+   <div class="item item-divider">
+      <a class="icon ion-thumbsup" ng-click="like(f)" ></a>
+      <i>{{f.likes}}</i>
+  </div>
+</div>
+
+
+
+  </ion-content>
+</ion-view>
