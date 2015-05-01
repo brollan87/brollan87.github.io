@@ -88,25 +88,19 @@ angular.module('starter.controllers', ['firebase'])
 .controller('DashCtrl', function($scope) {})
 
 .controller('FixaCtrl', function($scope, $firebaseArray, $location, $state, Fixa, $filter) {
-  $scope.itemsList = [{label:'test', url: 'http://s9.postimage.org/hqlg2ks97/image.gif'}];
    $scope.item = {text: ""};
    var ref = new Firebase('https://brollan87.firebaseio.com/fixalista');
 
     $scope.fixa = $firebaseArray(ref);
 
-
-
     $scope.viewDetails = function(fixa){
       Fixa.setSelected(fixa);
-     
-      //console.log($scope.selectedFixa.text);
-        $scope.$broadcast('newSelected', 'Some data');
+
       $state.go('tab.fixa-detail')
 
     }
 
     $scope.getBildUrl = function(f){
-     console.log(f);
       $scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
 $scope.images2 = [{url : 'img/bil.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
 $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id: 32}, {url: 'img/roadtripicon.jpg',  id: 33}];
@@ -121,17 +115,10 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
       }
      return single_object.url;
     }
-   // return single_object.url;
-  
-   // return 'img/helikopter.jpg';
-
     }
-
-  //      $scope.fixa.bild = $scope.getBildUrl($scope.fixa.bildid);
 
     $scope.addItem = function(){
       $scope.fixa.$add({ text: $scope.item.text, info: '', messages: $scope.messages});
-     // var child = $scope.fixa.
       $scope.item = {text: ""};
     }
 
@@ -148,7 +135,7 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
 
 $scope.showImages = false;
 
-$scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
+ $scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
 $scope.images2 = [{url : 'img/bil.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
 $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id: 32}, {url: 'img/roadtripicon.jpg',  id: 33}];
 
@@ -157,29 +144,29 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
    $scope.forslag = {text: '', lank: ''};
 
     $scope.selectedFixa = Fixa.getSelected();
-    //$scope.bild = $scope.images
    
        var ref = new Firebase('https://brollan87.firebaseio.com/fixalista/'+$scope.selectedFixa.$id);
       $scope.fixa = $firebaseObject(ref);
       var refForslag = new Firebase('https://brollan87.firebaseio.com/fixalista/'+$scope.selectedFixa.$id+ '/forslag');
       $scope.forslagarr = $firebaseArray(refForslag);
+
+    $scope.getBildUrl = function(){
+      var f = $scope.selectedFixa;
  
-
-
-  $scope.setBild = function(){
-        if($scope.selectedFixa.bildid){
-      var single_object = $filter('filter')($scope.images, function (d) {return d.id === $scope.selectedFixa.bildid;})[0];
+     var single_object;
+    if(f.bildid){
+       single_object = $filter('filter')($scope.images, function (d) {return d.id === f.bildid;})[0];
       if(!single_object){
-        single_object =  $filter('filter')($scope.images2, function (d) {return d.id === $scope.selectedFixa.bildid;})[0];
+        single_object =  $filter('filter')($scope.images2, function (d) {return d.id === f.bildid;})[0];
       }
       if(!single_object){
-        single_object =  $filter('filter')($scope.images3, function (d) {return d.id === $scope.selectedFixa.bildid;})[0];
+        single_object =  $filter('filter')($scope.images3, function (d) {return d.id === f.bildid;})[0];
       }
-      $scope.bild = single_object.url;
+     return single_object.url;
     }
-  }
+    }
 
-  $scope.setBild();
+    $scope.bildurl = $scope.getBildUrl($scope.selectedFixa);
 
     $scope.like = function(f){
       f.likes++;
@@ -208,7 +195,7 @@ $scope.setImage = function(id){
   $scope.fixa.$save();
   $scope.selectedFixa = $scope.fixa;
   $scope.showImages = false;
-  $scope.setBild();
+  $scope.bildurl = $scope.getBildUrl($scope.selectedFixa);
 
 }
 
@@ -235,7 +222,6 @@ $scope.setImage = function(id){
   }
 
   $scope.sparaForslag = function(forslag){
-       //  $scope.forslag = [{forslagtext: forslag.text, link: forslag.lank, likes: 0}];
        var forslaglankString ='';
        var forslagtextString = '';
        if(forslag.text){

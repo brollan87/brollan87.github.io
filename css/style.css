@@ -1,0 +1,13 @@
+.ng-show-add, .ng-show-remove {
+    /* ensure visibility during the transition */
+    display: block !important; /* yes, important */
+}
+
+.cssSlideUp {
+    transition: .5s linear all;
+    height: 80px;
+    overflow: hidden;
+}
+.cssSlideUp.ng-hide {
+    height:0;
+}

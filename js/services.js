@@ -1,36 +1,40 @@
 angular.module('starter.services', ['firebase'])
 
-.factory('Fixa', function() {
-  // Might use a resource here that returns a JSON array
 
-  // Some fake testing data
-  var fixalista = [{
-    id: 0,
-    name: 'Boka bil',
-    lastText: 'Los Angeles till Seattle',
-    face: 'img/bil.jpg'
-  }, {
-    id: 1,
-    name: 'Boka helikoptertur',
-    lastText: 'Gran Canyon',
-    face: 'img/helikopter.jpg'
 
-  }];
+.service('Fixa', function() {
+  var selectedFixa = {};
+
+  var setSelected = function(fixa) {
+     selectedFixa = fixa;
+   
+  }
+
+  var getSelected = function(){
+      return selectedFixa;
+  }
 
   return {
-    all: function() {
-      return fixalista;
+    setSelected: setSelected,
+    getSelected: getSelected
+  };
+
+})
+
+
+
+.factory('Fixa2', function() {
+  // Might use a resource here that returns a JSON array
+  var selectedFixa;
+
+  return {
+    getSelected: function() {
+       console.log("selectedFixa.text");
+      return selectedFixa;
     },
-    remove: function(fixa) {
-      fixalista.splice(fixalista.indexOf(fixa), 1);
-    },
-    get: function(fixaId) {
-      for (var i = 0; i < fixalista.length; i++) {
-        if (fixalista[i].id === parseInt(fixaId)) {
-          return fixalista[i];
-        }
-      }
-      return null;
+    setSelected: function(fixa) {
+      console.log(fixa.text);
+      var selectedFixa = fixa;
     }
   };
 })
