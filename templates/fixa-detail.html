@@ -1,76 +1,78 @@
 
 <ion-view view-title="Fixa">
-  <ion-content class="padding">
+<ion-content class="padding">
+
+<div>
+
 <div class="card">
 
-    <div class="item item-divider">
+  <div class="item item-avatar-right" style="  background-color: #f5f5f5; ">
+    {{selectedFixa.text}}
+    <img  ng-src="{{bildurl}}">
 
-    <h2>{{selectedFixa.text}}</h2>
   </div>
 
   <div ng-show="!selectedFixa.info" class="item item-body">
 
     <label class="item item-input item-floating-label">
-                         <div ng-if="selectedFixa.bildid" class="item item-avatar" style="float: right;">
-    <img ng-src="{{bildurl}}">
-  </div>
-    <span class="input-label">Information</span>
-    <textarea type="text" rows="3" style="font-size:23px;" ng-model="infotext" placeholder="Information"></textarea>
-               <button type="button" style="float:right;" class="button button-small button-balanced ion-checkmark" ng-disabled="!infotext" on-tap="sparaInfotext(infotext)"></button>
-                      <br>
-             <button type="button" style="float:left;" class="icon ion-camera" on-tap="showImagesList()"></button>
+      <span class="input-label">Information</span>
+      <textarea type="text" rows="2" style="font-size:18px;" ng-model="information.text" placeholder="Information"></textarea>
+      <div  style="float:right; color:green; font-size: 30px; " class="icon ion-checkmark" ng-disabled="!information.text" on-tap="sparaInfotext(information.text)"></div>
+      <br>
 
     </label>
-
+    <div style="float:left; font-size:30px; height:20px;" class="icon ion-chevron-down" ng-click="showImagesList()"></div>
   </div>
-    <div ng-show="selectedFixa.info" class="item item-body">
+
+
+  <div ng-show="selectedFixa.info" class="item item-body">
     <label class="item item-input item-floating-label">
-                   <div ng-if="selectedFixa.bildid" class="item item-avatar" style="float: right;">
-    <img ng-src="{{bildurl}}">
-  </div>
-    <span class="label">Information</span>
+
+      <p style="font-size:20px;">{{selectedFixa.info}}           </p>
+
+      <div style="float:right; color: red;" class="icon ion-close" on-tap="raderaInfotext()"></div>
     </label>
-    <p>{{selectedFixa.info}}           </p>
-       <button type="button" style="float:right;" class="button button-small button-assertive ion-close" on-tap="raderaInfotext()"></button>
-       <br>
-             <button type="button" style="float:left;" class="icon ion-camera" on-tap="showImagesList()"></button>
+    <br>
+    <div style="float:left; font-size:30px; height:20px;" class="icon ion-chevron-down" ng-click="showImagesList()"></div>
   </div>
 
 
 
   <ion-slide-box show-pager="false" class="cssSlideUp" ng-show="showImages">
-    <ion-slide>
-        <img ng-repeat="i in images" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
-    </ion-slide>
-        <ion-slide>
-        <img ng-repeat="i in images2" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
-    </ion-slide>
-        <ion-slide>
-        <img ng-repeat="i in images3" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
-    </ion-slide>
+  <ion-slide>
+  <img ng-repeat="i in images" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
+</ion-slide>
+<ion-slide>
+<img ng-repeat="i in images2" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
+</ion-slide>
+<ion-slide>
+<img ng-repeat="i in images3" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
+</ion-slide>
 </ion-slide-box>
 
 
 </div>
 
+<br>
+
 <div class="card">
-  
+
   <div ng-class="laggtillClass();"ng-click="clickShowLaggtill()">
     Lägg till förslag
   </div>
 
-  <div class="item item-text-wrap" ng-show="showLaggtill">
+  <div class="item item-text-wrap" ng-show="showLaggtill" style="padding: 0px;">
     <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
-    <span class="input-label">Text</span>
-    <textarea type="text" style="font-size:18px;" rows="3" ng-model="forslag.text" placeholder="Text"></textarea>
-  </label>
-  <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
-        <span class="input-label">Länk</span>
-    <input type="text" style="font-size:18px;" ng-model="forslag.lank" placeholder="Länk"></input>
+      <span class="input-label">Text</span>
+      <textarea type="text" style="font-size:16px;" rows="2" ng-model="forslag.text" placeholder="Text"></textarea>
     </label>
-   </div>
-   <div class="item item-divider cssSlideUp" ng-show="showLaggtill">
-      <button type="button" style="float:right;" class="button button-small button-balanced ion-checkmark" ng-disabled="!forslag.lank && !forslag.text" on-tap="sparaForslag(forslag);"></button>
+    <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
+      <span class="input-label">Länk</span>
+      <input type="text" style="font-size:16px;" ng-model="forslag.lank" placeholder="Länk"></input>
+    </label>
+  </div>
+  <div class="item item-divider cssSlideUp" ng-show="showLaggtill" style="height:50px;">
+    <button type="button" style="float:right;" class="button button-small button-balanced ion-checkmark" ng-disabled="!forslag.lank && !forslag.text" on-tap="sparaForslag(forslag);"> Spara</button>
   </div>
 
 </div>
@@ -78,23 +80,22 @@
 
 
 <div class="card" ng-repeat="f in forslagarr | orderBy : '-$id'">
-  
+
   <div class="item item-divider">
     Förslag
   </div>
   <div class="item item-text-wrap">
-      <h>{{f.forslagtext}}<h>
-        <br>
-        <br>
-    <a  href="{{f.link}}">{{f.link}}</a>
-   </div>
-   <div class="item item-divider">
+    <h>{{f.forslagtext}}<h>
+      <br>
+      <br>
+      <a  href="{{f.link}}">{{f.link}}</a>
+    </div>
+    <div class="item item-divider">
       <a class="icon ion-thumbsup" ng-click="like(f)" ></a>
       <i>{{f.likes}}</i>
+    </div>
   </div>
+
 </div>
-
-
-
-  </ion-content>
+</ion-content>
 </ion-view>

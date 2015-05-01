@@ -102,7 +102,7 @@ angular.module('starter.controllers', ['firebase'])
 
     $scope.getBildUrl = function(f){
       $scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
-$scope.images2 = [{url : 'img/bil.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
+$scope.images2 = [{url : 'img/hollywood.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
 $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id: 32}, {url: 'img/roadtripicon.jpg',  id: 33}];
      var single_object;
     if(f.bildid){
@@ -118,7 +118,7 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
     }
 
     $scope.addItem = function(){
-      $scope.fixa.$add({ text: $scope.item.text, info: '', messages: $scope.messages});
+      $scope.fixa.$add({ text: $scope.item.text, info: '', bildid: 0});
       $scope.item = {text: ""};
     }
 
@@ -126,7 +126,7 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
       $scope.fixa.$remove(fixa);
     }
 
-    $scope.updateItem = function(packa){
+    $scope.updateItem = function(fixa){
        $scope.fixa.$save(fixa);
     }
 })
@@ -136,12 +136,13 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
 $scope.showImages = false;
 
  $scope.images = [{url : 'img/bil.jpg', id: 11}, {url: 'img/helikopter.jpg', id: 12}, {url: 'img/roadtripicon.jpg',  id: 13}];
-$scope.images2 = [{url : 'img/bil.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
+$scope.images2 = [{url : 'img/hollywood.jpg', id: 21}, {url: 'img/helikopter.jpg', id: 22}, {url: 'img/roadtripicon.jpg',  id: 23}];
 $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id: 32}, {url: 'img/roadtripicon.jpg',  id: 33}];
 
 
   $scope.showLaggtill = false;
    $scope.forslag = {text: '', lank: ''};
+   $scope.information = {text : ''};
 
     $scope.selectedFixa = Fixa.getSelected();
    
@@ -212,13 +213,14 @@ $scope.setImage = function(id){
         if($scope.fixa){
         $scope.fixa.info = infotext;
         $scope.fixa.$save();
-        $scope.infotext = "";
+        $scope.information = {text: ""};
       }
     }
 
     $scope.raderaInfotext = function(){
       $scope.fixa.info = '';
       $scope.fixa.$save();
+      $scope.information = {text: ""};
   }
 
   $scope.sparaForslag = function(forslag){
