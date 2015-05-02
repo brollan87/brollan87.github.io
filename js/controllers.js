@@ -171,8 +171,11 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar'])
 
 // })
 
-.controller('MainSchedulerCtrl', function($scope) {
-
+.controller('BetalaCtrl', function($scope) {
+ $scope.data = {};
+  $scope.data.columns = [{"id":"1453","name":"Vad"},{"id":"1355","name":"Pris/tot"},{"id":"0393","name":"Pris/pers"}];
+    
+  $scope.data.items = [{"1234":"Pink","1355":"32000","1453":"Kryssning","2939":"3 in.","3932":"29  in.","0393":"8000"},{"1234":"Black","1355":"16000","1453":"Hotell LA","2939":"13 in.","3932":"9  in.","0393":"4000"}];
 
 })
 

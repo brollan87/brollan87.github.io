@@ -67,6 +67,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
 
+      .state('tab.betala', {
+      url: '/betala',
+      views: {
+        'tab-betala': {
+          templateUrl: 'templates/tab-betala.html',
+          controller: 'BetalaCtrl'
+        }
+      }
+    })
+
   .state('tab.packa', {
     url: '/packa',
     views: {
