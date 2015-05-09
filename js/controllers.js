@@ -1,22 +1,40 @@
-angular.module('starter.controllers', ['firebase', 'ui.calendar'])
+angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-maps'])
 
 
-
+.config(function($ionicConfigProvider) {
+  // back button text always displays "Back"
+  $ionicConfigProvider.backButton.previousTitleText(false);
+})
 
         
 
 
 
-.controller('CalendarController', ['$scope', function($scope) {
+.controller('CalendarController', ['$scope', '$state', 'SchemaDetail', '$firebaseArray', function($scope, $state, SchemaDetail, $firebaseArray) {
+    var refEvents = new Firebase('https://brollan87.firebaseio.com/events/');
+  $scope.eventsarr = $firebaseArray(refEvents);
+  console.log($scope.eventsarr);
       $scope.events = [
-      {id: 1, title: 'Los Angeles',start: new Date('Tor Jun 11 2015 '),end: new Date('Tis Jun 16 2015'), allDay: true},
-       {id: 2, title: 'Las Vegas',start: new Date('Mån Jun 15 2015 '),end: new Date('Fre Jun 19 2015'), allDay: true},
+      {id: 1, title: 'Los Angeles',start: new Date('Tor Jun 11 2015 '),end: new Date('Tis Jun 16 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
+       {id: 2, title: 'Las Vegas',start: new Date('Mån Jun 15 2015 '),end: new Date('Fre Jun 19 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
+       {id: 3, title: 'San Fransisco',start: new Date('Tor Jun 25 2015 '),end: new Date('Tis Jun 30 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
+       {id: 4, title: 'Alaskakryssning',start: new Date('Fre Jul 03 2015 '),end: new Date('Lör Jul 11 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
 
     ];
+
+    // $scope.event = {id: 1, title: 'Los Angeles',start: new Date('Tor Jun 11 2015 '),end: new Date('Tis Jun 16 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
+
+   // $scope.event =  {id: 2, title: 'Las Vegas',start: new Date('Mån Jun 15 2015 '),end: new Date('Fre Jun 19 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
+  // $scope.event = {id: 3, title: 'San Fransisco',start: new Date('Tor Jun 25 2015 '),end: new Date('Tis Jun 30 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
+  //$scope.eventsarr.$add($scope.event);
+
+ // $scope.event2 = {id: 4, title: 'Alaskakryssning',start: new Date('Fre Jul 03 2015 '),end: new Date('Lör Jul 11 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
+//$scope.eventsarr.$add($scope.event2);
+
   $scope.eventSource = {
             url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
             className: 'gcal-event',           // an option!
-            currentTimezone: 'Sweden/Stockholm' // an option!
+            currentTimezone: 'Sweden/Stockholm'
     };
 
     /* event sources array*/
@@ -26,7 +44,11 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar'])
       console.log("Event select fired");
     };
     $scope.eventClick=function(event, allDay, jsEvent, view) {
-      console.log("EVent click fired");
+
+      console.log(event.id);
+      console.log($scope.eventsarr.$keyAt(event.id));
+      SchemaDetail.setSelected($scope.eventsarr.$keyAt(event.id-1));
+      $state.go('tab.schema-detail')
     };
 
 
@@ -48,7 +70,7 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar'])
         selectable : true,
         unselectAuto : true,
         selectHelper : true,
-        editable : true,
+        editable : false,
          defaultDate: new Date(2015, 05, 11),
         monthNames : ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"],
         dayNamesShort : ["Sön", "Mån", "Tis", "Ons", "Tors", "Fre", "Lör"],
@@ -86,90 +108,66 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar'])
     
 }])
 
-// .directive('dhxScheduler', function() {
-//   return {
-//     restrict: 'A',
-//     scope: false,
-//     transclude: true,
-//     template:'<div class="dhx_cal_navline" ng-transclude></div><div class="dhx_cal_header"></div><div class="dhx_cal_data"></div>',
+.controller('SchemaDetailCtrl', function($scope, SchemaDetail, $http, $firebaseObject) {
+  $scope.plats = 'test';
+  $scope.hotell;
+    $scope.getPos = function(adress){
+   // adress.replace(' ','+');
+   // console.log(adress);
+    //8585+Santa+Monica+Blvd,West+Hollywood
+      $http.get('http://maps.google.com/maps/api/geocode/json?address='+adress+'&sensor=false').success(function(mapData) {
+      console.log(mapData);
+      console.log(mapData.results[0].geometry.location.lat);
+        $scope.map = {
+          center: { latitude: mapData.results[0].geometry.location.lat, longitude: mapData.results[0].geometry.location.lng },
+          markerpos: { latitude: mapData.results[0].geometry.location.lat, longitude: mapData.results[0].geometry.location.lng },
+          zoom: 15,
+          zoomControl: true
+           };
+    });
+  }
+  var id = SchemaDetail.getSelected();
+  var refEvent = new Firebase('https://brollan87.firebaseio.com/events/'+id);
+  $scope.eventet = $firebaseObject(refEvent);
+
+  $scope.eventet.$loaded().then(function () {
+   console.log($scope.eventet.title);
+// var event = SchemaDetail.getSelected();
+  $scope.plats = $scope.eventet.title;
+  console.log($scope.plats);
+  $scope.hotell = $scope.eventet.hotell; 
+  
+   if($scope.hotell){
+     $scope.getPos($scope.hotell.adress);
+ }
+
+
+});
+
+
+  $scope.sparaHotell = function(hotell){
+    var pos = $scope.getPos(hotell.adress);
+    $scope.eventet.hotell = hotell;
+    $scope.eventet.$save();
+    $scope.hotell = hotell;
+    if(hotell.adress){
+    $scope.getPos(hotell.adress);
+  }
+  }
+
+  $scope.raderaHotell = function(){
+    $scope.eventet.hotell = '';
+    $scope.hotell = null;
+    $scope.eventet.$save();
+
+  }
 
 
 
-//     link:function ($scope, $element, $attrs, $controller){
-//       //default state of the scheduler
-//       if (!$scope.scheduler)
-//         $scope.scheduler = {};
-//       $scope.scheduler.mode = $scope.scheduler.mode || "month";
-//       $scope.scheduler.date = $scope.scheduler.date || new Date();
 
-//       //watch data collection, reload on changes
-//       $scope.$watch($attrs.data, function(collection){
-//         scheduler.clearAll();
-//         scheduler.parse(collection, "json");
-//       }, true);
 
-//       //mode or date
-//       $scope.$watch(function(){
-//         return $scope.scheduler.mode + $scope.scheduler.date.toString();
-//       }, function(nv, ov) {
-//         var mode = scheduler.getState();
-//         if (nv.date != mode.date || nv.mode != mode.mode)
-//           scheduler.setCurrentView($scope.scheduler.date, $scope.scheduler.mode);
-//       }, true);
+})
 
-//       //size of scheduler
-//       $scope.$watch(function() {
-//         return $element[0].offsetWidth + "." + $element[0].offsetHeight;
-//       }, function() {
-//         scheduler.setCurrentView();
-//       });
-
-//       //styling for dhtmlx scheduler
-//       $element.addClass("dhx_cal_container");
-
-//       //init scheduler
-//       scheduler.init($element[0], $scope.scheduler.mode, $scope.scheduler.date);
-//     }
-//   }
-// })
-
-// .directive('dhxTemplate', ['$filter', function($filter){
-//   scheduler.aFilter = $filter;
-
-//   return {
-//     restrict: 'AE',
-//     terminal:true,
-   
-//     link:function($scope, $element, $attrs, $controller){
-//       $element[0].style.display = 'none';
-
-//       var template = $element[0].innerHTML;
-//       template = template.replace(/[\r\n]/g,"").replace(/"/g, "\\\"").replace(/\{\{event\.([^\}]+)\}\}/g, function(match, prop){
-//         if (prop.indexOf("|") != -1){
-//           var parts = prop.split("|");
-//           return "\"+scheduler.aFilter('"+(parts[1]).trim()+"')(event."+(parts[0]).trim()+")+\"";
-//         }
-//         return '"+event.'+prop+'+"';
-//       });
-//       var templateFunc = Function('sd','ed','event', 'return "'+template+'"');
-//       scheduler.templates[$attrs.dhxTemplate] = templateFunc;
-//     }
-//   };
-// }])
-
-// .controller('MainSchedulerCtrl', function($scope) {
-//   $scope.events = [
-//     { id:1, text:"Los Angeles",
-//       start_date: new Date(2015, 05, 11),
-//       end_date: new Date(2015, 05, 15) },
-//     { id:2, text:"Las Vegas",
-//       start_date: new Date(2015, 05, 15 ),
-//       end_date: new Date(2015, 05, 18 ) }
-//   ];
-
-//   $scope.scheduler = { date : new Date(2015,05,10) };
-
-// })
 
 .controller('BetalaCtrl', function($scope) {
  $scope.data = {};
@@ -286,11 +284,13 @@ $scope.images3 = [{url : 'img/bil.jpg', id: 31}, {url: 'img/helikopter.jpg', id:
 }
 
 $scope.setImage = function(id){
+  if($scope.fixa){
   $scope.fixa.bildid= id;
   $scope.fixa.$save();
   $scope.selectedFixa = $scope.fixa;
   $scope.showImages = false;
   $scope.bildurl = $scope.getBildUrl($scope.selectedFixa);
+}
 
 }
 
@@ -312,12 +312,15 @@ $scope.setImage = function(id){
     }
 
     $scope.raderaInfotext = function(){
+      if($scope.fixa){
       $scope.fixa.info = '';
       $scope.fixa.$save();
       $scope.information = {text: ""};
+    }
   }
 
   $scope.sparaForslag = function(forslag){
+    if($scope.fixa){
        var forslaglankString ='';
        var forslagtextString = '';
        if(forslag.text){
@@ -329,8 +332,10 @@ $scope.setImage = function(id){
          $scope.forslagarr.$add({forslagtext: forslagtextString, link: forslaglankString, likes: 0});
      $scope.showLaggtill = false;
      $scope.forslag = {text: '', lank: ''};
+   }
 
   }
+
 })
 
 .controller('PackaCtrl', function($scope, $firebaseArray){

@@ -21,23 +21,26 @@ angular.module('starter.services', ['firebase'])
 
 })
 
+.service('SchemaDetail', function() {
+  var selectedEvent = {};
 
+  var setSelected = function(event) {
+     selectedEvent = event;
+   
+  }
 
-.factory('Fixa2', function() {
-  // Might use a resource here that returns a JSON array
-  var selectedFixa;
+  var getSelected = function(){
+      return selectedEvent;
+  }
 
   return {
-    getSelected: function() {
-       console.log("selectedFixa.text");
-      return selectedFixa;
-    },
-    setSelected: function(fixa) {
-      console.log(fixa.text);
-      var selectedFixa = fixa;
-    }
+    setSelected: setSelected,
+    getSelected: getSelected
   };
+
 })
+
+
 
 .factory("packlistaService", ["$firebaseArray",
   function($firebaseArray) {
