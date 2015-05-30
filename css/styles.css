@@ -127,7 +127,7 @@ body {
 .week-forecast > li {
   border-top: 3px solid #fc0203;
   float: left;
-  width: 70px;
+  width: 65px;
   height: 110px;
 }
 .week-forecast > li:first-child {
