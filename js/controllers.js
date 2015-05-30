@@ -12,7 +12,7 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
 
 
 
-.controller('CalendarController', ['$scope', '$state', 'SchemaDetail', '$firebaseArray', function($scope, $state, SchemaDetail, $firebaseArray) {
+.controller('CalendarController', ['$scope', '$state', 'SchemaDetail', '$firebaseArray','$ionicPopup', function($scope, $state, SchemaDetail, $firebaseArray, $ionicPopup) {
     var refEvents = new Firebase('https://brollan87.firebaseio.com/events/');
   $scope.eventsarr = $firebaseArray(refEvents);
   console.log($scope.eventsarr);
@@ -44,6 +44,46 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
 
     $scope.onSelect=function(start, end){
       console.log("Event select fired");
+
+  var myPopup = $ionicPopup.show({
+    template: 'Plats <input type="text" ng-model="data.ort">',
+    title: 'Lägg till',
+    subTitle: 'Plats',
+    scope: $scope,
+    buttons: [
+      { text: 'Cancel' },
+      {
+        text: '<b>Save</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.data.wifi) {
+            //don't allow the user to close unless he enters wifi password
+            e.preventDefault();
+          } else {
+            return $scope.data.wifi;
+          }
+        }
+      }
+    ]
+  });
+  myPopup.then(function(res) {
+    console.log('Tapped!', res);
+  });
+
+
+
+
+      console.log(start);
+        console.log(end);
+      console.log($scope.eventsarr.length);
+      var ort ="Seattle";
+
+      var startDate = new Date();
+      var slutDate = new Date();// + 1 dag...
+
+      $scope.event2 = {id: $scope.eventsarr.length+1, title: ort ,start: startDate,end: slutDate, allDay: true, hotell: {namn: '', adress: ''}}
+//$scope.eventsarr.$add($scope.event2);
+
     };
     $scope.eventClick=function(event, allDay, jsEvent, view) {
 
@@ -148,14 +188,7 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
 
 
     $scope.getPos = function(adress){
-   // adress.replace(' ','+');sss
-   // console.log(adress);sfafasfssdasdsljkj
-    //8585+Santa+Monica+Blvd,West+Hollywood
       $http.get('http://maps.google.com/maps/api/geocode/json?address='+adress+'&sensor=false').success(function(mapData) {
-      console.log(mapData);
-      console.log(mapData.results[0].geometry.location.lat);
-      console.log(mapData.results[0].address_components);
-
       angular.forEach(mapData.results[0].address_components, function(types) {
   if(types.types[0] == "postal_code"){
     fetchWeather(types.long_name);
@@ -237,6 +270,7 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
 
     $scope.addItem = function(text){
       if(!$scope.eventet.attgora){
+        $scope.attgora = [];
         $scope.eventet.attgora = [];
         $scope.eventet.$save();
         console.log($scope.eventet);
