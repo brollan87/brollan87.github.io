@@ -1,9 +1,11 @@
 angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-maps'])
+//angular.module('starter.controllers', [])
 
 
 .config(function($ionicConfigProvider) {
   // back button text always displays "Back"
   $ionicConfigProvider.backButton.previousTitleText(false);
+  $ionicConfigProvider.tabs.position('bottom');
 })
 
         
@@ -45,7 +47,6 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
     };
     $scope.eventClick=function(event, allDay, jsEvent, view) {
 
-      console.log(event.id);
       console.log($scope.eventsarr.$keyAt(event.id));
       SchemaDetail.setSelected($scope.eventsarr.$keyAt(event.id-1));
       $state.go('tab.schema-detail')
@@ -108,16 +109,59 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
     
 }])
 
-.controller('SchemaDetailCtrl', function($scope, SchemaDetail, $http, $firebaseObject) {
+.controller('SchemaDetailCtrl', function($scope, SchemaDetail, $http, $firebaseObject ,$location, weatherService) {
   $scope.plats = 'test';
   $scope.hotell;
+   $scope.item = {text: ""};
+
+  $scope.showkarta = false;
+
+    // SchemaDetail.registerObserverCallback(function() {
+    //     $scope.eventselectedid = SchemaDetail.getSelected();
+    //     console.log($scope.eventselectedid);   
+    // });
+
+
+      function fetchWeather(zip) {
+        weatherService.getWeather(zip).then(function(data){
+          $scope.place = data;
+          console.log(data);
+          $scope.temperatur = (data.item.condition.temp -32) * 5/9;
+          
+        }); 
+      }
+
+      $scope.mapWeatherclass = function(weather){
+   console.log(weather);
+        return "rain";
+      }
+
+      $scope.convertTemp = function(tempF){
+        return (tempF -32) * 5/9;
+      }
+      
+
+      $scope.mapWeatherclassPic = function(weather){
+        console.log(weather);
+        return "climacon rain";
+      }
+
+
     $scope.getPos = function(adress){
-   // adress.replace(' ','+');
-   // console.log(adress);
+   // adress.replace(' ','+');sss
+   // console.log(adress);sfafasfssdasdsljkj
     //8585+Santa+Monica+Blvd,West+Hollywood
       $http.get('http://maps.google.com/maps/api/geocode/json?address='+adress+'&sensor=false').success(function(mapData) {
       console.log(mapData);
       console.log(mapData.results[0].geometry.location.lat);
+      console.log(mapData.results[0].address_components);
+
+      angular.forEach(mapData.results[0].address_components, function(types) {
+  if(types.types[0] == "postal_code"){
+    fetchWeather(types.long_name);
+  }
+});
+      
         $scope.map = {
           center: { latitude: mapData.results[0].geometry.location.lat, longitude: mapData.results[0].geometry.location.lng },
           markerpos: { latitude: mapData.results[0].geometry.location.lat, longitude: mapData.results[0].geometry.location.lng },
@@ -126,16 +170,24 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
            };
     });
   }
-  var id = SchemaDetail.getSelected();
+
+ // console.log("t" + SchemaDetail.getSelected());
+
+
+    $scope.$watch('SchemaDetail.selectedEvent', function(newVal, oldVal){
+      console.log("new val " + newVal);
+    // if(newVal && newVal!=''){
+        var id = SchemaDetail.getSelected();
+
+
   var refEvent = new Firebase('https://brollan87.firebaseio.com/events/'+id);
   $scope.eventet = $firebaseObject(refEvent);
 
   $scope.eventet.$loaded().then(function () {
-   console.log($scope.eventet.title);
-// var event = SchemaDetail.getSelected();
+
   $scope.plats = $scope.eventet.title;
-  console.log($scope.plats);
   $scope.hotell = $scope.eventet.hotell; 
+   $scope.attgora = $scope.eventet.attgora;
   
    if($scope.hotell){
      $scope.getPos($scope.hotell.adress);
@@ -144,6 +196,26 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
 
 });
 
+     //}
+     //else{
+      //sds $location.path('/templates/tab-schema.html');
+     //}
+}, true);
+
+
+
+
+
+
+  $scope.showKarta = function(){
+    if($scope.showkarta){
+      $scope.showkarta=false;
+    }
+    else{
+      $scope.showkarta = true;
+    }
+
+  }
 
   $scope.sparaHotell = function(hotell){
     var pos = $scope.getPos(hotell.adress);
@@ -163,8 +235,25 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
   }
 
 
+    $scope.addItem = function(text){
+      if(!$scope.eventet.attgora){
+        $scope.eventet.attgora = [];
+        $scope.eventet.$save();
+        console.log($scope.eventet);
+      }
+      console.log(text);
+      $scope.attgora.push({ text: text});
+      $scope.eventet.attgora = $scope.attgora;//.push({ text: text});
+      $scope.item = {text: ""};
+      $scope.eventet.$save();
+    }
 
-
+    $scope.removeItem = function(ag){
+      $scope.attgora.splice($scope.attgora.indexOf(ag), 1 )
+    //  $scope.eventet.attgora.splice( $scope.eventet.attgora.indexOf(ag), 1 );
+    $scope.eventet.attgora = $scope.attgora;
+      $scope.eventet.$save();
+    }
 
 })
 
@@ -358,4 +447,7 @@ var ref = new Firebase('https://brollan87.firebaseio.com/packlista');
        $scope.packa.$save(packa);
     }
 })
+
+
+
 ;

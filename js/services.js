@@ -3,7 +3,7 @@ angular.module('starter.services', ['firebase'])
 
 
 .service('Fixa', function() {
-  var selectedFixa = {};
+  var selectedFixa; //= {};
 
   var setSelected = function(fixa) {
      selectedFixa = fixa;
@@ -22,10 +22,29 @@ angular.module('starter.services', ['firebase'])
 })
 
 .service('SchemaDetail', function() {
-  var selectedEvent = {};
+  var observerCallbacks = [];
+  var selectedEvent ='';
+
+      // register an observer
+    var registerObserverCallback = function(callback){
+        console.log("test" + callback);
+        observerCallbacks.push(callback);
+        console.log(observerCallbacks.length);
+    };
+
+       var notifyObservers = function(){
+     console.log("testte" + observerCallbacks.length);
+    angular.forEach(observerCallbacks, function(callback){
+
+      callback();
+    });
+  };
+
 
   var setSelected = function(event) {
      selectedEvent = event;
+
+     notifyObservers();
    
   }
 
@@ -33,12 +52,35 @@ angular.module('starter.services', ['firebase'])
       return selectedEvent;
   }
 
+
+
   return {
     setSelected: setSelected,
-    getSelected: getSelected
+    getSelected: getSelected,
+    registerObserverCallback: registerObserverCallback,
+    selectedEvent: selectedEvent
   };
 
 })
+
+  .factory('weatherService', ['$http', '$q', function ($http, $q){
+      function getWeather (zip) {
+        var deferred = $q.defer();
+        $http.get('https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20weather.forecast%20WHERE%20location%3D%22' + zip + '%22&format=json&diagnostics=true&callback=')
+          .success(function(data){
+            deferred.resolve(data.query.results.channel);
+          })
+          .error(function(err){
+            console.log('Error retrieving markets');
+            deferred.reject(err);
+          });
+        return deferred.promise;
+      }
+      
+      return {
+        getWeather: getWeather
+      };
+    }])
 
 
 

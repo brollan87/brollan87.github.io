@@ -2,19 +2,21 @@
 
 
 
-    <ion-content class="showScroll">
+    <ion-content class="background">
+  <!--  <div class="background"></div>-->
       <br>
       <div>
-  <img src="img/roadtrip.jpg" height="150px" width="340px" style="border-radius:10px; display:block; margin-left:auto; margin-right:auto;"></img>
+ <!-- <img src="img/roadtrip.jpg" height="150px" width="340px" style="border-radius:10px; display:block; margin-left:auto; margin-right:auto;"></img>-->
     <br>
 
 </div>
       <div class="item item-divider">Kalender</div>
-            <div class="row padding" ng-controller="CalendarController">
+            <div class="row padding kalender" ng-controller="CalendarController">
               <div class="col col-100" >
               <div data-tap-disabled="true" ng-model="eventSources" ui-calendar="uiConfig" class="calendar" id="dayCalendar" calendar="dayCalendar"></div>
               </div>
              </div>
+  
      </ion-content>
   
 </ion-view>
