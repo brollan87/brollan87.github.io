@@ -25,7 +25,7 @@
 .background{
     position: absolute;
        z-index: -1;
-background: linear-gradient(rgba(255,255,255,0.3),rgba(255,255,255,0.3)), url("/img/roadtrip.jpg") center;
+background: linear-gradient(rgba(255,255,255,0.4),rgba(255,255,255,0.4)), url("/img/roadtrip.jpg") center;
     top: 0;
     bottom: 0;
     left: 0;
@@ -40,6 +40,27 @@ background: linear-gradient(rgba(255,255,255,0.3),rgba(255,255,255,0.3)), url("/
     background-color: rgba(255,255,255,0.7) !important;
 }
 
+.card, .attgoralist, .item-body, .item-input, .item-floating-label{
+
+      background-color: rgba(255,255,255,0.6) !important;
+}
+
+.gradient-rainbow{ 
+
+
+border:1px solid #aaa;
+
+background: -moz-linear-gradient(left, red, orange, yellow, green, 
+blue, indigo, violet);
+background: -webkit-gradient(linear, left center, right center, from(red), 
+color-stop(14%, orange), color-stop(28%, yellow), color-stop(42%, green), 
+color-stop(56%, blue), color-stop(70%, indigo), to(violet)); 
+background: -o-linear-gradient(left, red, orange, yellow, green, 
+blue, indigo, violet);
+background: -ms-linear-gradient(left, red, orange, yellow, green, 
+blue, indigo, violet);
+}
+
 
 }
 
@@ -48,7 +69,8 @@ background: linear-gradient(rgba(255,255,255,0.3),rgba(255,255,255,0.3)), url("/
 }
 
 #dayCalendar{
-   background-color: rgba(255,255,255,0.7);
+   background-color: rgba(255,255,255,0.8);
+     box-shadow: 0 5px 5px rgba(0, 0, 0);
 }
 
 #weather{
