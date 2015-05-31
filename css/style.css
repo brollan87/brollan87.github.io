@@ -25,7 +25,7 @@
 .background{
     position: absolute;
        z-index: -1;
-background: linear-gradient(rgba(255,255,255,0.8),rgba(255,255,255,0.8)), url("/img/roadtrip.jpg") center;
+background: linear-gradient(rgba(255,255,255,0.3),rgba(255,255,255,0.3)), url("/img/roadtrip.jpg") center;
     top: 0;
     bottom: 0;
     left: 0;
@@ -44,8 +44,21 @@ background: linear-gradient(rgba(255,255,255,0.8),rgba(255,255,255,0.8)), url("/
 }
 
 .kalender{
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(255,255,255,1);
 }
+
+#dayCalendar{
+   background-color: rgba(255,255,255,0.7);
+}
+
+#weather{
+background: rgba(255,255,255,0.75);
+/*  background-color: rgba(255,255,255,0.7);*/
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+ 
+}
+
 
 
 /** For the task list header columns and tasks **/

@@ -5,6 +5,9 @@
 
 <div>
         <div>
+          <div id="weather-container">
+            <div id="weather-background"></div>
+          <div id="weather">
           <h2>{{ place.location.city }} | {{ temperatur | number:0 }}&deg; <img src="http://l.yimg.com/a/i/us/we/52/{{place.item.condition.code}}.gif"/></h2>
 
           <!--           <div ng-repeat="forecast in place.item.forecast" >
@@ -27,6 +30,9 @@
 
         
                   </ul>
+
+                </div>
+              </div>
 
 <div class="card">
 
@@ -71,67 +77,6 @@
 
  </ui-gmap-google-map>
 
-
-
-
-<!--
-  <ion-slide-box show-pager="false" class="cssSlideUp" ng-show="showImages">
-  <ion-slide>
-  <img ng-repeat="i in images" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
-</ion-slide>
-<ion-slide>
-<img ng-repeat="i in images2" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
-</ion-slide>
-<ion-slide>
-<img ng-repeat="i in images3" style="width: 100px; float: left; margin: 5px; " src="{{i.url}}" ng-click="setImage(i.id);">
-</ion-slide>
-</ion-slide-box>
-
-
-</div>
-
-<br>
-
-<div class="card">
-
-  <div ng-class="laggtillClass();"ng-click="clickShowLaggtill()">
-    Lägg till förslag
-  </div>
-
-  <div class="item item-text-wrap" ng-show="showLaggtill" style="padding: 0px;">
-    <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
-      <span class="input-label">Text</span>
-      <textarea type="text" style="font-size:16px;" rows="2" ng-model="forslag.text" placeholder="Text"></textarea>
-    </label>
-    <label class="item item-input item-floating-label cssSlideUp" ng-show="showLaggtill">
-      <span class="input-label">Länk</span>
-      <input type="text" style="font-size:16px;" ng-model="forslag.lank" placeholder="Länk"></input>
-    </label>
-  </div>
-  <div class="item item-divider cssSlideUp" ng-show="showLaggtill" style="height:50px;">
-    <button type="button" style="float:right;" class="button button-small button-balanced ion-checkmark" ng-disabled="!forslag.lank && !forslag.text" on-tap="sparaForslag(forslag);"> Spara</button>
-  </div>
-
-</div>
-
-
-
-<div class="card" ng-repeat="f in forslagarr | orderBy : '-$id'">
-
-  <div class="item item-divider">
-    Förslag
-  </div>
-  <div class="item item-text-wrap">
-    <h>{{f.forslagtext}}<h>
-      <br>
-      <br>
-      <a  href="{{f.link}}">{{f.link}}</a>
-    </div>
-    <div class="item item-divider">
-      <a class="icon ion-thumbsup" ng-click="like(f)" ></a>
-      <i>{{f.likes}}</i>
-    </div>
-  </div>-->
 
 </div>
 
