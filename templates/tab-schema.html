@@ -12,7 +12,7 @@
 </div>
       <div class="item item-divider">Kalender</div>
             <div class="row padding kalender" ng-controller="CalendarController">
-              <div class="col col-100" >
+              <div class="col col-100" ng-if="loaded">
               <div data-tap-disabled="true" ng-model="eventSources" ui-calendar="uiConfig" class="calendar" id="dayCalendar" calendar="dayCalendar"></div>
               </div>
              </div>
