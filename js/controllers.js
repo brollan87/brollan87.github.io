@@ -69,12 +69,12 @@ $scope.eventsarr.$loaded()
     .then(function(){
 console.log($scope.eventsarr);
 
-  $scope.p = $scope.eventsarr.$getRecord("-Jqa8lkHd9G6KGX3vTYv");
-  //$scope.p.allDay = true;
- $scope.p.start = new Date('Fre Jul 03 2015').toDateString();
- $scope.p.end = new Date('Sön Jul 05 2015').toDateString();
-  //console.log($scope.p);
-  $scope.eventsarr.$save($scope.p);
+ //  $scope.p = $scope.eventsarr.$getRecord("-Jqa8lkHd9G6KGX3vTYv");
+ //  //$scope.p.allDay = true;
+ // $scope.p.start = new Date('Fre Jul 03 2015').toDateString();
+ // $scope.p.end = new Date('Sön Jul 05 2015').toDateString();
+ //  //console.log($scope.p);
+ //  $scope.eventsarr.$save($scope.p);
 
 
           $scope.eventSource = {
