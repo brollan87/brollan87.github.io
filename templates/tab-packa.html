@@ -9,11 +9,11 @@
     </button>
   </div>
 
-   <ion-list>
-      <ion-item class="item item-remove-animate item-avatar" ng-repeat="p in packa" type="item-text-wrap">
+   <ion-list class="fixalist">
+      <ion-item class="item item-remove-animate item-avatar fixalist" ng-repeat="p in packa" type="item-text-wrap">
       <div class="item-checkbox">
       <label class="checkbox"> <input type="checkbox" ng-model="p.checked" ng-checked="p.checked" ng-change="updateItem(p)"></label></div>
-        <p>{{p.text}}</p>
+        {{p.text}}
 
         <ion-option-button class="button-assertive" ng-click="removeItem(p)">
           Ta bort

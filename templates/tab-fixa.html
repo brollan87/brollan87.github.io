@@ -1,6 +1,6 @@
 <ion-view view-title="Fixa" class="background">
   <ion-content>
-    <ion-list>
+    <ion-list class="fixalist">
       <div class="item item-input-inset">
    <label class="item-input-wrapper">
       <input type="text" name="item.text" ng-model="item.text">
@@ -15,7 +15,7 @@
 
 
   </div>
-      <ion-item class="item-remove-animate item-avatar item-icon-right item-transparent" ng-repeat="f in fixa" type="item-text-wrap" ng-click="viewDetails(f)">
+      <ion-item class="item-remove-animate item-avatar item-icon-right item-transparent fixalist" ng-repeat="f in fixa" type="item-text-wrap" ng-click="viewDetails(f)">
         <img ng-src="{{getBildUrl(f)}}">
         <h2>{{f.text}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>
