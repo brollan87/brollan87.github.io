@@ -25,7 +25,7 @@
 .background{
     position: absolute;
        z-index: -1;
-background: linear-gradient(rgba(255,255,255,0.4),rgba(255,255,255,0.4)), url("/img/roadtrip.jpg") center;
+background: linear-gradient(rgba(255,255,255,0.0),rgba(255,255,255,0.0)), url("/img/roadtrip.jpg") center;
     top: 0;
     bottom: 0;
     left: 0;
