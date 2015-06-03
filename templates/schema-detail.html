@@ -10,25 +10,14 @@
           <div id="weather">
           <h2>{{ place.location.city }} | {{ temperatur | number:0 }}&deg; <img src="http://l.yimg.com/a/i/us/we/52/{{place.item.condition.code}}.gif"/></h2>
 
-          <!--           <div ng-repeat="forecast in place.item.forecast" >
-            <p><strong>{{ forecast.date }}</strong> – {{ forecast.text }}</p>
-            <p>H: {{ forecast.high }}&deg; | L: {{ forecast.low }}&deg;</p>
-          </div>
-        </div> -->
-
                    <ul class="week-forecast" >
                      <li ng-class="mapWeatherclass(forecast.text)" ng-repeat="forecast in place.item.forecast">
                         <div class="inner">
                            <h5 class="week-day">{{forecast.day}}</h5>
-                          <!-- <i ng-class="mapWeatherclassPic(forecast.text)"></i>-->
                           <img src="http://l.yimg.com/a/i/us/we/52/{{forecast.code}}.gif"/>
                            <p class="week-day-temperature">{{ convertTemp(forecast.high) | number:0 }}&deg; / {{ convertTemp(forecast.low) | number:0  }}&deg;</p>
                         </div>
                      </li>
-
-
-
-        
                   </ul>
 
                 </div>
@@ -38,12 +27,9 @@
 
   <div class="item" style="  background-color: #f5f5f5; ">
     <b>Hotell</b>
-   <!-- <img  ng-src="{{bildurl}}">-->
-
   </div>
 
   <div ng-if="!hotell" class="item item-body">
-
     <label class="item item-input item-floating-label">
       <span class="input-label">Namn</span>
       <textarea type="text" rows="2" style="font-size:18px;" ng-model="hotell.namn" placeholder="Namn"></textarea>

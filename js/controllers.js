@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-maps'])
+angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-maps', 'tabSlideBox'])
 //angular.module('starter.controllers', [])
 
 
@@ -12,12 +12,12 @@ angular.module('starter.controllers', ['firebase', 'ui.calendar', 'uiGmapgoogle-
 
 
 
-.controller('CalendarController', ['$scope', '$state', 'SchemaDetail', '$firebaseArray','$ionicPopup', function($scope, $state, SchemaDetail, $firebaseArray, $ionicPopup) {
+.controller('CalendarController', ['$scope', '$state', 'SchemaDetail', '$firebaseArray','$ionicPopup', '$http','$timeout', function($scope, $state, SchemaDetail, $firebaseArray, $ionicPopup, $http, $timeout) {
     var refEvents = new Firebase('https://brollan87.firebaseio.com/events/');
  // $scope.events = [];
   $scope.eventsarr = $firebaseArray(refEvents);
  $scope.eventSources = [];
- //$scope.loaded = false;
+ $scope.valuta = {input: null, output: null};
 
 console.log($scope.eventsarr);
 
@@ -67,7 +67,6 @@ console.log($scope.eventsarr);
 
 $scope.eventsarr.$loaded()
     .then(function(){
-console.log($scope.eventsarr);
 
  //  $scope.p = $scope.eventsarr.$getRecord("-Jqa8lkHd9G6KGX3vTYv");
  //  //$scope.p.allDay = true;
@@ -77,23 +76,32 @@ console.log($scope.eventsarr);
  //  $scope.eventsarr.$save($scope.p);
 
 
-          $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-            className: 'gcal-event',           // an option!
-            currentTimezone: 'Sweden/Stockholm'
-    };
+          $scope.eventSource ={};
+    //        {
+    //         url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
+    //         className: 'gcal-event',           // an option!
+    //         currentTimezone: 'Sweden/Stockholm'
+    // };
 
-   // console.log($scope.events);
-   //  $scope.events = $scope.eventsarr;
-    //    [
-    //   {id: 1, title: 'Los Angeles',start: new Date('Tor Jun 11 2015 '),end: new Date('Tis Jun 16 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
-    //    {id: 2, title: 'Las Vegas',start: new Date('Mån Jun 15 2015 '),end: new Date('Fre Jun 19 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
-    //    {id: 3, title: 'San Fransisco',start: new Date('Tor Jun 25 2015 '),end: new Date('Tis Jun 30 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
-    //    {id: 4, title: 'Alaskakryssning',start: new Date('Fre Jul 03 2015 '),end: new Date('Lör Jul 11 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}},
+//
+$scope.currency;
 
-    // ];
+      $http.get('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22USDSEK%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=').success(function(currencyData) {
+         $scope.currency = currencyData.query.results.rate.Rate;
 
-     //console.log($scope.events);
+});
+
+    $scope.datestring = new Date();
+ 
+    $scope.tickInterval = 1000 //ms
+
+    var tick = function() {
+        $scope.datestring = Date.now() // get the current time
+        $timeout(tick, $scope.tickInterval); // reset the timer
+    }
+
+    $timeout(tick, $scope.tickInterval);
+
     /* event sources array*/
     $scope.eventSources = [$scope.eventsarr, $scope.eventSource];
     $scope.loaded = true;
@@ -101,21 +109,17 @@ console.log($scope.eventsarr);
     });
 
 
-    // $scope.event = {id: 1, title: 'Los Angeles',start: new Date('Tor Jun 11 2015 '),end: new Date('Tis Jun 16 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
-
-   // $scope.event =  {id: 2, title: 'Las Vegas',start: new Date('Mån Jun 15 2015 '),end: new Date('Fre Jun 19 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
-  // $scope.event = {id: 3, title: 'San Fransisco',start: new Date('Tor Jun 25 2015 '),end: new Date('Tis Jun 30 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
-  //$scope.eventsarr.$add($scope.event);
-
- // $scope.event2 = {id: 4, title: 'Alaskakryssning',start: new Date('Fre Jul 03 2015 '),end: new Date('Lör Jul 11 2015'), allDay: true, hotell: {namn: 'test', adress: 'test'}}
-//$scope.eventsarr.$add($scope.event2);
-
-
-
+    $scope.calculate = function(){
+      if($scope.valuta.input && $scope.currency)
+      $scope.valuta.output = $scope.valuta.input * parseInt($scope.currency,10); 
+      else{
+        $scope.valuta.output = null;
+      }
+    }
     $scope.onSelect=function(start, end){
       console.log("Event select fired");
       var startdate = start._d.toString().substring(0,15);
-      //console.log(startdate.substring(0,12));
+ 
  $scope.data = {}
   var myPopup = $ionicPopup.show({
     template: startdate +'<br><br> Plats <input type="text" ng-model="data.ort"><br>Antal dagar <input type="number" min="1" ng-init="data.antaldagar=1" ng-model="data.antaldagar">',

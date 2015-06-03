@@ -1,25 +1,58 @@
-<ion-view view-title="MAJS RESPLAN">
+  <ion-view view-title="MAJS RESPLAN">
 
 
 
-    <ion-content class="background">
-  <!--  <div class="background"></div>-->
-      <br>
-      <div>
- <!-- <img src="img/roadtrip.jpg" height="150px" width="340px" style="border-radius:10px; display:block; margin-left:auto; margin-right:auto;"></img>-->
-    <br>
+  <ion-content class="background">
 
-</div>
-     
-            <div class="row padding kalender" ng-controller="CalendarController">
-              <div class="col col-100" ng-if="loaded">
-                <div id="weather-container">
-                  <div id="weather-background"></div>
-              <div data-tap-disabled="true" ng-model="eventSources" ui-calendar="uiConfig" class="calendar" id="dayCalendar" calendar="dayCalendar"></div>
-              </div>
-            </div>
-             </div>
-  
-     </ion-content>
-  
-</ion-view>
+  <br>
+  <br>
+
+  <div class="row padding kalender" ng-controller="CalendarController">
+    <div class="col col-100" ng-if="loaded">
+      <div id="weather-container">
+        <div id="weather-background"></div>
+        <div data-tap-disabled="true" ng-model="eventSources" ui-calendar="uiConfig" class="calendar" id="dayCalendar" calendar="dayCalendar"></div>
+      </div>
+    </div>
+  </div>
+
+  <tab-slide-box>
+  <div class="tsb-icons tabbar">
+    <div class="tsb-ic-wrp">
+            <a href="javascript:;" class="ion-cash"></a>
+      <a href="javascript:;" class="ion-clock"></a>
+
+    </div>
+  </div>
+  <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
+    <ion-slide>
+
+  <div class="card">
+    <div class="row">
+      <div class="col currleft">Valuta <br>  {{currency}}</div>
+      <div class="col col-50 currcenter"><input placeholder=" USD" type="number" name="valuta.input" ng-model="valuta.input" ng-change="calculate()"></div>
+      <div class="col currright">  SEK <br> {{valuta.output}}</div>
+    </div>
+
+  </div>
+  </ion-slide>
+  <ion-slide>
+  <div class="card">
+    <div class="row">
+      <div class="col col-100 time">
+        <br>
+        {{datestring | date: 'HH:mm:ss' : '+0200' }}
+      </div>
+    </div>
+  </div>
+  </ion-slide>
+
+  </ion-slide-box>
+  </tab-slide-box>
+  <br>
+  <br>
+
+
+  </ion-content>
+
+  </ion-view>
